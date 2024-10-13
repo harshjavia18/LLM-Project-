@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Generation LLM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #000; /* Black background */
+            color: #fff; /* White text for contrast */
+            overflow-x: hidden;
+        }
+
+        /* Navbar Styles */
+        nav {
+            display: flex;
+            justify-content: space-around; /* Even spacing for navbar links */
+            padding: 10px 0;
+            background-color: #333; /* Darker background for the navbar */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 5px 10px;
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 3px;
+        }
+
+        nav a:hover {
+            background-color: #444;
+            color: #fff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Sections Styling */
+        h1, h2 {
+            text-align: center;
+            margin-top: 20px; /* Reduced margin */
+            font-family: 'Verdana', sans-serif;
+            font-size: 26px;
+        }
+
+        main {
+            padding: 20px;
+            margin-top: 10px; /* Reduced margin */
+        }
+
+        section {
+            background: #222; /* Dark background for sections */
+            margin: 15px 0; /* Reduced margin */
+            padding: 20px 15px; /* Reduced padding */
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #555; /* Dark border */
+            border-radius: 5px;
+            background-color: #333; /* Dark textarea background */
+            color: #fff; /* White text in textarea */
+        }
+
+        button {
+            padding: 10px 15px;
+            background: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        pre {
+            background: #333;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #333; /* Dark footer */
+            color: #fff;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        #usage {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #usage li {
+            padding: 5px 0;
+        }
+
+        #language-select {
+            margin: 10px 0; /* Reduced margin */
+            text-align: center;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #555; /* Dark dropdown border */
+            background-color: #333; /* Dark dropdown background */
+            color: #fff; /* White text in dropdown */
+        }
+
+        /* Language info text in the center */
+        #language-info {
+            margin-top: 10px; /* Reduced margin */
+            font-size: 18px;
+            color: #ccc; /* Light gray color for contrast */
+            text-align: center; /* Center the text */
+        }
+
+        /* Interesting Facts Section */
+        #facts {
+            text-align: center; /* Center text in this section */
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Section fade-in animation */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Custom animation on scroll */
+        section.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Code Generation LLM</h1>
+        <p style="text-align:center; font-size: 18px;">AI-powered assistant for code generation across multiple languages</p>
+    </header>
+
+    <!-- Smaller Navbar with Equal Spacing -->
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#features">Features</a>
+        <a href="#languages">Languages</a>
+        <a href="#demo">Demo</a>
+    </nav>
+
+    <main id="home">
+        <!-- Features Section -->
+        <section id="features">
+            <h2>Features</h2>
+            <ul>
+                <li>Supports multiple programming languages: Python, C, C++, JavaScript, Java.</li>
+                <li>AI-generated code snippets based on user prompts.</li>
+                <li>Dynamic language selection and real-time code generation.</li>
+                <li>Responsive and user-friendly interface.</li>
+                <li>Optimized for various use cases like algorithms, classes, and functional code.</li>
+            </ul>
+        </section>
+
+        <!-- Languages Section -->
+        <section id="languages">
+            <h2>Select Programming Language</h2>
+            <div id="language-select">
+                <select id="language" onchange="updateLanguage()">
+                    <option value="">-- Choose a language --</option>
+                    <option value="python" style="background-color: yellow;">Python</option>
+                    <option value="c" style="background-color: lightblue;">C</option>
+                    <option value="c++" style="background-color: lightgreen;">C++</option>
+                    <option value="javascript" style="background-color: orange;">JavaScript</option>
+                    <option value="java" style="background-color: lightpink;">Java</option>
+                </select>
+            </div>
+            <div id="language-info"></div>
+            <h3>Sample Code for Selected Language:</h3>
+            <pre id="sample-code"></pre> <!-- Moved here -->
+        </section>
+
+        <!-- Demo Section -->
+        <section id="demo">
+            <h2>Code Generation Demo</h2>
+            <textarea id="input" placeholder="Enter your prompt here..."></textarea>
+            <button onclick="generateCode()">Generate Code</button>
+            <h3>Generated Code:</h3>
+            <pre id="output"></pre>
+        </section>
+
+        <!-- Interesting Facts Section -->
+        <section id="facts">
+            <h2>Interesting Facts about Programming Languages</h2>
+            <button onclick="generateFact()">Generate a Fact</button>
+            <p id="fact"></p> <!-- Display the generated fact here -->
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Code Generation LLM Project</p>
+    </footer>
+
+    <script>
+        // Update language information and show syntax sample
+        function updateLanguage() {
+            const languageSelect = document.getElementById('language');
+            const selectedLanguage = languageSelect.value;
+            const languageInfo = document.getElementById('language-info');
+            const sampleCodeBox = document.getElementById('sample-code');
+
+            let infoText = "";
+            let sampleCode = "";
+            switch (selectedLanguage) {
+                case "python":
+                    infoText = "Python is great for data analysis and web development.";
+                    sampleCode = "def hello_world():\n    print('Hello, World!')";
+                    break;
+                case "c":
+                    infoText = "C is a powerful general-purpose programming language.";
+                    sampleCode = "#include <stdio.h>\nint main() {\n    printf('Hello, World!');\n    return 0;\n}";
+                    break;
+                case "c++":
+                    infoText = "C++ is an extension of C that includes object-oriented features.";
+                    sampleCode = "#include <iostream>\nint main() {\n    std::cout << 'Hello, World!';\n    return 0;\n}";
+                    break;
+                case "javascript":
+                    infoText = "JavaScript is essential for web development and creating interactive web pages.";
+                    sampleCode = "console.log('Hello, World!');";
+                    break;
+                case "java":
+                    infoText = "Java is a versatile language used for building platform-independent applications.";
+                    sampleCode = "public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println('Hello, World!');\n    }\n}";
+                    break;
+                default:
+                    infoText = "";
+                    sampleCode = "";
+                    break;
+            }
+
+            languageInfo.textContent = infoText;
+            sampleCodeBox.textContent = sampleCode;
+        }
+
+        // Generate code based on input
+        function generateCode() {
+            const input = document.getElementById('input').value;
+            const output = document.getElementById('output');
+            output.textContent = `Generated code for: ${input}`;
+            // Add your code generation logic here
+        }
+
+        // Generate an interesting fact
+        function generateFact() {
+            const facts = [
+                "Python was named after the British comedy series 'Monty Python's Flying Circus'.",
+                "C++ was developed by Bjarne Stroustrup as an enhancement to the C programming language.",
+                "JavaScript was originally developed in just 10 days.",
+                "C is one of the oldest programming languages still in widespread use today.",
+                "Java is the most popular programming language in the world."
+            ];
+            const randomIndex = Math.floor(Math.random() * facts.length);
+            const factElement = document.getElementById('fact');
+            factElement.textContent = facts[randomIndex];
+        }
+
+    </script>
+</body>
+</html>
